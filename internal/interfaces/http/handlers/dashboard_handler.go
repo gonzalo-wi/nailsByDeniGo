@@ -17,7 +17,6 @@ func NewDashboardHandler(getMetricsUC *dashboardapp.GetMetricsUseCase) *Dashboar
 	return &DashboardHandler{getMetricsUC: getMetricsUC}
 }
 
-// GET /dashboard/metrics
 func (h *DashboardHandler) GetMetrics(c *gin.Context) {
 	metrics, err := h.getMetricsUC.Execute()
 	if err != nil {

@@ -53,7 +53,6 @@ func NewAppointmentHandler(
 	}
 }
 
-// POST /appointments
 func (h *AppointmentHandler) Create(c *gin.Context) {
 	var req dto.CreateAppointmentRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -64,7 +63,7 @@ func (h *AppointmentHandler) Create(c *gin.Context) {
 	claims := c.MustGet(middleware.ClaimsKey).(*security.Claims)
 	clientID := req.ClientID
 	if claims.Role == "client" {
-		// Para clientes el ID siempre viene del token, no del body
+
 		clientID = claims.UserID
 	} else if clientID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "client_id es requerido"})
@@ -86,7 +85,6 @@ func (h *AppointmentHandler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, dto.AppointmentToResponse(result))
 }
 
-// GET /appointments/next — devuelve el próximo turno del cliente autenticado (null si no tiene)
 func (h *AppointmentHandler) NextAppointment(c *gin.Context) {
 	claims := c.MustGet(middleware.ClaimsKey).(*security.Claims)
 	appt, err := h.nextUC.Execute(claims.UserID)
@@ -101,7 +99,6 @@ func (h *AppointmentHandler) NextAppointment(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"next_appointment": dto.AppointmentToResponse(appt)})
 }
 
-// GET /appointments
 func (h *AppointmentHandler) List(c *gin.Context) {
 	filters := appointment.AppointmentFilters{}
 	if s := c.Query("status"); s != "" {
@@ -117,7 +114,7 @@ func (h *AppointmentHandler) List(c *gin.Context) {
 	if df := c.Query("date_from"); df != "" {
 		filters.DateFrom = &df
 	} else {
-		// Sin filtro de fecha: default últimos 30 días para no traer todo el historial.
+
 		defaultFrom := time.Now().AddDate(0, 0, -30).Format("2006-01-02")
 		filters.DateFrom = &defaultFrom
 	}
@@ -137,7 +134,6 @@ func (h *AppointmentHandler) List(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// GET /appointments (cliente: solo ve sus propios turnos)
 func (h *AppointmentHandler) ListMine(c *gin.Context) {
 	claims := c.MustGet(middleware.ClaimsKey).(*security.Claims)
 	clientID := claims.UserID
@@ -160,7 +156,6 @@ func (h *AppointmentHandler) ListMine(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// GET /appointments — ruta unificada: cliente ve los suyos, admin ve todos.
 func (h *AppointmentHandler) ListByRole(c *gin.Context) {
 	claims := c.MustGet(middleware.ClaimsKey).(*security.Claims)
 	if claims.Role == "client" {
@@ -170,7 +165,6 @@ func (h *AppointmentHandler) ListByRole(c *gin.Context) {
 	h.List(c)
 }
 
-// GET /appointments/calendar?from=2026-03-01&to=2026-03-31
 func (h *AppointmentHandler) Calendar(c *gin.Context) {
 	from := c.Query("from")
 	to := c.Query("to")
@@ -191,7 +185,6 @@ func (h *AppointmentHandler) Calendar(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// GET /appointments/:id
 func (h *AppointmentHandler) GetByID(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -210,7 +203,6 @@ func (h *AppointmentHandler) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.AppointmentToResponse(appt))
 }
 
-// PATCH /appointments/:id/confirm
 func (h *AppointmentHandler) Confirm(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -229,7 +221,6 @@ func (h *AppointmentHandler) Confirm(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.AppointmentToResponse(appt))
 }
 
-// PATCH /appointments/:id/cancel
 func (h *AppointmentHandler) Cancel(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -248,7 +239,6 @@ func (h *AppointmentHandler) Cancel(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.AppointmentToResponse(appt))
 }
 
-// PATCH /appointments/:id/complete
 func (h *AppointmentHandler) Complete(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -267,7 +257,6 @@ func (h *AppointmentHandler) Complete(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.AppointmentToResponse(appt))
 }
 
-// PATCH /appointments/:id/final-price
 func (h *AppointmentHandler) UpdateFinalPrice(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -295,7 +284,6 @@ func (h *AppointmentHandler) UpdateFinalPrice(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.AppointmentToResponse(appt))
 }
 
-// PATCH /appointments/:id/deposit
 func (h *AppointmentHandler) UpdateDeposit(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {

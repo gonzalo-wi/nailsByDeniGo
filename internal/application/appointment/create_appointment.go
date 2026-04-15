@@ -46,7 +46,6 @@ func NewCreateAppointmentUseCase(
 }
 
 func (uc *CreateAppointmentUseCase) Execute(input CreateAppointmentInput) (*appointment.Appointment, error) {
-	// Validar que la fecha no sea en el pasado
 	today := time.Now().Format("2006-01-02")
 	if input.Date < today {
 		return nil, appointment.ErrPastDate
@@ -68,7 +67,6 @@ func (uc *CreateAppointmentUseCase) Execute(input CreateAppointmentInput) (*appo
 		return nil, errors.New("servicio no encontrado")
 	}
 
-	// Validar que el cliente no tenga ya un turno ese día
 	hasAppt, err := uc.appointmentRepo.ExistsByClientAndDate(input.ClientID, input.Date)
 	if err != nil {
 		return nil, err

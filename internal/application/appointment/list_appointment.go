@@ -18,8 +18,6 @@ func (uc *ListAppointmentUseCase) Execute(filters appointment.AppointmentFilters
 	return uc.appointmentRepo.FindAll(filters)
 }
 
-// ─── NextAppointment ─────────────────────────────────────────────────────────────────
-
 type NextAppointmentUseCase struct {
 	appointmentRepo appointment.Repository
 }
@@ -32,8 +30,6 @@ func (uc *NextAppointmentUseCase) Execute(clientID uint) (*appointment.Appointme
 	today := time.Now().Format("2006-01-02")
 	return uc.appointmentRepo.FindNextByClient(clientID, today)
 }
-
-// ─── GetAppointmentByID ─────────────────────────────────────────────────────────────────
 
 type GetAppointmentByIDUseCase struct {
 	appointmentRepo appointment.Repository
@@ -53,8 +49,6 @@ func (uc *GetAppointmentByIDUseCase) Execute(id uint) (*appointment.Appointment,
 	}
 	return appt, nil
 }
-
-// ─── CompleteAppointment ─────────────────────────────────────────────────────────────
 
 type CompleteAppointmentUseCase struct {
 	appointmentRepo appointment.Repository

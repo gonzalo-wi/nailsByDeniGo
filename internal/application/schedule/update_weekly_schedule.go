@@ -35,8 +35,6 @@ func (uc *UpdateWeeklyScheduleUseCase) Execute(entries []WeeklyScheduleEntry) ([
 	return uc.scheduleRepo.FindWeeklySchedule()
 }
 
-// ─── GetWeeklySchedule ─────────────────────────────────────────────────────────────────
-
 type GetWeeklyScheduleUseCase struct {
 	scheduleRepo schedule.Repository
 }

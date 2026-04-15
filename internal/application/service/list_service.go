@@ -14,8 +14,6 @@ func (uc *ListServiceUseCase) Execute(activeOnly bool) ([]service.Service, error
 	return uc.serviceRepo.FindAll(activeOnly)
 }
 
-// ─── GetByID ──────────────────────────────────────────────────────────────────
-
 type GetServiceByIDUseCase struct {
 	serviceRepo service.Repository
 }

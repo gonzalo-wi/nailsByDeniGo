@@ -34,14 +34,11 @@ func NewGetAvailabilityUseCase(sr schedule.Repository, ar appointment.Repository
 }
 
 func (uc *GetAvailabilityUseCase) Execute(input GetAvailabilityInput) (*GetAvailabilityOutput, error) {
-	// Parsear fecha y obtener día de semana
 	d, err := time.Parse("2006-01-02", input.Date)
 	if err != nil {
 		return nil, err
 	}
 	dayOfWeek := int(d.Weekday())
-
-	// Obtener configuración semanal
 	schedules, err := uc.scheduleRepo.FindWeeklySchedule()
 	if err != nil {
 		return nil, err
@@ -64,7 +61,6 @@ func (uc *GetAvailabilityUseCase) Execute(input GetAvailabilityInput) (*GetAvail
 		duration = daySchedule.SlotDurationMin
 	}
 
-	// Obtener turnos y bloqueos existentes para la fecha
 	existingAppointments, err := uc.appointmentRepo.FindByDateRange(input.Date, input.Date)
 	if err != nil {
 		return nil, err
@@ -74,7 +70,6 @@ func (uc *GetAvailabilityUseCase) Execute(input GetAvailabilityInput) (*GetAvail
 		return nil, err
 	}
 
-	// Generar todos los slots posibles y filtrar los ocupados
 	slots := generateAvailableSlots(
 		daySchedule.OpeningTime,
 		daySchedule.ClosingTime,
@@ -92,8 +87,6 @@ func (uc *GetAvailabilityUseCase) Execute(input GetAvailabilityInput) (*GetAvail
 	}, nil
 }
 
-// generateAvailableSlots recorre los slots en pasos de stepMin y devuelve
-// solo aquellos que no se solapan con turnos existentes ni con bloqueos.
 func generateAvailableSlots(
 	opening, closing string,
 	stepMin, durationMin int,
@@ -131,7 +124,6 @@ func isOccupied(startTime, endTime string, appts []appointment.Appointment, bloc
 		if a.Status == appointment.StatusCancelled || a.Status == appointment.StatusAbsent {
 			continue
 		}
-		// Overlap: a.StartTime < endTime AND a.EndTime > startTime
 		if a.StartTime < endTime && a.EndTime > startTime {
 			return true
 		}

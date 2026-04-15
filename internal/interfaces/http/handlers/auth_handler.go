@@ -20,7 +20,6 @@ func NewAuthHandler(registerUC *authapp.RegisterUseCase, loginUC *authapp.LoginU
 	return &AuthHandler{registerUC: registerUC, loginUC: loginUC, adminLoginUC: adminLoginUC}
 }
 
-// POST /auth/register
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req dto.RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -47,7 +46,6 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	c.JSON(http.StatusCreated, dto.TokenResponse{ClientID: out.ClientID, Token: out.Token})
 }
 
-// POST /auth/login
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req dto.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -78,7 +76,6 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	})
 }
 
-// POST /auth/admin/login
 func (h *AuthHandler) AdminLogin(c *gin.Context) {
 	var req dto.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

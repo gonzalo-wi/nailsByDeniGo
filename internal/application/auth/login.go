@@ -31,7 +31,6 @@ func (uc *LoginUseCase) Execute(input LoginInput) (*LoginOutput, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Siempre devolver el mismo error para no revelar si el email existe
 	if c == nil || !c.Active || !uc.hasher.Check(input.Password, c.PasswordHash) {
 		return nil, client.ErrInvalidCredentials
 	}

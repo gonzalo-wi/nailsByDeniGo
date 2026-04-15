@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 
 	serviceapp "apiGoShei/internal/application/service"
 	"apiGoShei/internal/domain/service"
@@ -76,12 +75,11 @@ func (h *ServiceHandler) List(c *gin.Context) {
 
 // GET /services/:id
 func (h *ServiceHandler) GetByID(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id invalido"})
+	id, ok := parseIDParam(c)
+	if !ok {
 		return
 	}
-	s, err := h.getByIDUC.Execute(uint(id))
+	s, err := h.getByIDUC.Execute(id)
 	if err != nil {
 		if err == service.ErrNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -95,9 +93,8 @@ func (h *ServiceHandler) GetByID(c *gin.Context) {
 
 // PATCH /services/:id
 func (h *ServiceHandler) Update(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id invalido"})
+	id, ok := parseIDParam(c)
+	if !ok {
 		return
 	}
 	var req dto.UpdateServiceRequest
@@ -106,7 +103,7 @@ func (h *ServiceHandler) Update(c *gin.Context) {
 		return
 	}
 	s, err := h.updateUC.Execute(serviceapp.UpdateServiceInput{
-		ID:               uint(id),
+		ID:               id,
 		Name:             req.Name,
 		Description:      req.Description,
 		DurationMinutes:  req.DurationMinutes,
@@ -128,12 +125,11 @@ func (h *ServiceHandler) Update(c *gin.Context) {
 
 // PATCH /services/:id/toggle
 func (h *ServiceHandler) Toggle(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id invalido"})
+	id, ok := parseIDParam(c)
+	if !ok {
 		return
 	}
-	s, err := h.toggleUC.Execute(uint(id))
+	s, err := h.toggleUC.Execute(id)
 	if err != nil {
 		if err == service.ErrNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

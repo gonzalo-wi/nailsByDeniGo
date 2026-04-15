@@ -2,7 +2,6 @@ package serviceapp
 
 import "apiGoShei/internal/domain/service"
 
-// UpdateServiceInput contiene los campos editables de un servicio.
 type UpdateServiceInput struct {
 	ID               uint
 	Name             string
@@ -44,8 +43,6 @@ func (uc *UpdateServiceUseCase) Execute(input UpdateServiceInput) (*service.Serv
 	}
 	return s, nil
 }
-
-// ─── ToggleService ────────────────────────────────────────────────────────────
 
 type ToggleServiceUseCase struct {
 	serviceRepo service.Repository

@@ -2,8 +2,6 @@ package appointmentapp
 
 import "apiGoShei/internal/domain/appointment"
 
-// ─── UpdateFinalPrice ──────────────────────────────────────────────────────────────
-
 type UpdateFinalPriceInput struct {
 	ID           uint
 	ExtrasAmount float64
@@ -34,8 +32,6 @@ func (uc *UpdateFinalPriceUseCase) Execute(input UpdateFinalPriceInput) (*appoin
 	}
 	return appt, nil
 }
-
-// ─── UpdateDeposit ────────────────────────────────────────────────────────────────────
 
 type UpdateDepositInput struct {
 	ID            uint

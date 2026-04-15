@@ -4,8 +4,8 @@ type CreateAppointmentRequest struct {
 	ClientID       uint   `json:"client_id"        binding:"required"`
 	ServiceID      uint   `json:"service_id"       binding:"required"`
 	ProfessionalID *uint  `json:"professional_id"`
-	Date           string `json:"date"             binding:"required"` // "2026-03-16"
-	StartTime      string `json:"start_time"       binding:"required"` // "14:00"
+	Date           string `json:"date"             binding:"required"`
+	StartTime      string `json:"start_time"       binding:"required"`
 	Notes          string `json:"notes"`
 }
 

@@ -5,7 +5,6 @@ import (
 	"apiGoShei/internal/domain/client"
 )
 
-// ClientWithStats combina los datos del cliente con sus acumulados de turnos.
 type ClientWithStats struct {
 	client.Client
 	AppointmentCount int64

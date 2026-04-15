@@ -1,0 +1,16 @@
+# Variables de entorno — NUNCA subir al repositorio
+.env
+.env.*
+!.env.example
+
+# Binarios compilados
+/bin/
+*.exe
+
+# Caché de Go
+vendor/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
