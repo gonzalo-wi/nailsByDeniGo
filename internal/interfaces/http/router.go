@@ -3,6 +3,7 @@ package http
 import (
 	"apiGoShei/internal/interfaces/http/handlers"
 	"apiGoShei/internal/interfaces/http/middleware"
+	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -37,6 +38,11 @@ func SetupRouter(
 	}))
 
 	base := r.Group("/service-nails")
+
+	// ─── Health check ────────────────────────────────────────────────────────
+	base.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
 
 	// ─── Rutas públicas ───────────────────────────────────────────────────────
 	auth := base.Group("/auth")
