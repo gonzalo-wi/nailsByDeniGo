@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    container_name: apigoshei
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    env_file:
+      - .env
+    environment:
+      - APP_PORT=8082
