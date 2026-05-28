@@ -19,6 +19,7 @@ type CreateAppointmentInput struct {
 	Date           string
 	StartTime      string
 	Notes          string
+	IsAdmin        bool
 }
 
 type CreateAppointmentUseCase struct {
@@ -46,9 +47,11 @@ func NewCreateAppointmentUseCase(
 }
 
 func (uc *CreateAppointmentUseCase) Execute(input CreateAppointmentInput) (*appointment.Appointment, error) {
-	today := time.Now().Format("2006-01-02")
-	if input.Date < today {
-		return nil, appointment.ErrPastDate
+	if !input.IsAdmin {
+		today := time.Now().Format("2006-01-02")
+		if input.Date < today {
+			return nil, appointment.ErrPastDate
+		}
 	}
 
 	clientFound, err := uc.clientRepo.FindByID(input.ClientID)

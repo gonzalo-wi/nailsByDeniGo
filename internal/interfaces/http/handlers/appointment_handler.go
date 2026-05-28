@@ -77,6 +77,7 @@ func (h *AppointmentHandler) Create(c *gin.Context) {
 		Date:           req.Date,
 		StartTime:      req.StartTime,
 		Notes:          req.Notes,
+		IsAdmin:        claims.Role == "admin" || claims.Role == "superadmin",
 	})
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
