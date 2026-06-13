@@ -17,6 +17,8 @@ type AppointmentResponse struct {
 	FinalPrice     float64 `json:"final_price"`
 	Status         string  `json:"status"`
 	Notes          string  `json:"notes,omitempty"`
+	PenaltyAmount  float64 `json:"penalty_amount"`
+	PenaltyNote    string  `json:"penalty_note,omitempty"`
 }
 
 func AppointmentToResponse(a *appointment.Appointment) AppointmentResponse {
@@ -35,5 +37,7 @@ func AppointmentToResponse(a *appointment.Appointment) AppointmentResponse {
 		FinalPrice:     a.FinalPrice,
 		Status:         string(a.Status),
 		Notes:          a.Notes,
+		PenaltyAmount:  a.PenaltyAmount,
+		PenaltyNote:    a.PenaltyNote,
 	}
 }

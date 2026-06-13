@@ -231,7 +231,19 @@ func (h *AppointmentHandler) Cancel(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id invalido"})
 		return
 	}
-	appt, err := h.cancelUC.Execute(id)
+
+	input := appointmentapp.CancelAppointmentInput{ID: id}
+
+	claims := c.MustGet(middleware.ClaimsKey).(*security.Claims)
+	if claims.Role == "admin" || claims.Role == "superadmin" {
+		var req dto.CancelAppointmentRequest
+		if err := c.ShouldBindJSON(&req); err == nil {
+			input.PenaltyAmount = req.PenaltyAmount
+			input.PenaltyNote = req.PenaltyNote
+		}
+	}
+
+	appt, err := h.cancelUC.Execute(input)
 	if err != nil {
 		code := http.StatusBadRequest
 		if err == appointment.ErrNotFound {

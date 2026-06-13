@@ -27,6 +27,8 @@ type Appointment struct {
 	FinalPrice     float64
 	Status         AppointmentStatus
 	Notes          string
+	PenaltyAmount  float64
+	PenaltyNote    string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 }

@@ -15,8 +15,10 @@ type AppointmentModel struct {
 	ExtrasNote     string  `gorm:"type:text"`
 	DepositAmount  float64 `gorm:"type:numeric(10,2);default:0"`
 	FinalPrice     float64 `gorm:"type:numeric(10,2);not null"`
-	Status         string  `gorm:"type:varchar(20);not null;default:'PENDING'"`
-	Notes          string
+	Status        string  `gorm:"type:varchar(20);not null;default:'PENDING'"`
+	Notes         string
+	PenaltyAmount float64 `gorm:"type:numeric(10,2);default:0"`
+	PenaltyNote   string  `gorm:"type:text"`
 
 	Client  ClientModel  `gorm:"foreignKey:ClientID"`
 	Service ServiceModel `gorm:"foreignKey:ServiceID"`

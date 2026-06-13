@@ -51,6 +51,8 @@ func (r *AppointmentRepository) Update(entity *appointment.Appointment) error {
 		"deposit_amount": entity.DepositAmount,
 		"final_price":    entity.FinalPrice,
 		"notes":          entity.Notes,
+		"penalty_amount": entity.PenaltyAmount,
+		"penalty_note":   entity.PenaltyNote,
 	}).Error
 }
 
@@ -306,6 +308,8 @@ func toAppointmentDomain(m *models.AppointmentModel) *appointment.Appointment {
 		FinalPrice:     m.FinalPrice,
 		Status:         appointment.AppointmentStatus(m.Status),
 		Notes:          m.Notes,
+		PenaltyAmount:  m.PenaltyAmount,
+		PenaltyNote:    m.PenaltyNote,
 		CreatedAt:      m.CreatedAt,
 		UpdatedAt:      m.UpdatedAt,
 	}
