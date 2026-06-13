@@ -8,9 +8,11 @@ import (
 )
 
 type AdminUpdateAppointmentInput struct {
-	ID        uint
-	Status    *appointment.AppointmentStatus
-	ServiceID *uint
+	ID            uint
+	Status        *appointment.AppointmentStatus
+	ServiceID     *uint
+	PenaltyAmount *float64
+	PenaltyNote   string
 }
 
 var ErrInvalidStatus = errors.New("estado inválido")
@@ -54,6 +56,11 @@ func (uc *AdminUpdateAppointmentUseCase) Execute(input AdminUpdateAppointmentInp
 		appt.ServiceID = svc.ID
 		appt.BasePrice = svc.BasePrice
 		appt.FinalPrice = svc.BasePrice + appt.ExtrasAmount
+	}
+
+	if input.PenaltyAmount != nil {
+		appt.PenaltyAmount = *input.PenaltyAmount
+		appt.PenaltyNote = input.PenaltyNote
 	}
 
 	if err := uc.appointmentRepo.Update(appt); err != nil {

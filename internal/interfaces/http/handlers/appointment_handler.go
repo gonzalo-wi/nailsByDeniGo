@@ -337,12 +337,17 @@ func (h *AppointmentHandler) AdminUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if req.Status == nil && req.ServiceID == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "debe indicar status o service_id a modificar"})
+	if req.Status == nil && req.ServiceID == nil && req.PenaltyAmount == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "debe indicar al menos un campo a modificar: status, service_id o penalty_amount"})
 		return
 	}
 
-	input := appointmentapp.AdminUpdateAppointmentInput{ID: id, ServiceID: req.ServiceID}
+	input := appointmentapp.AdminUpdateAppointmentInput{
+		ID:            id,
+		ServiceID:     req.ServiceID,
+		PenaltyAmount: req.PenaltyAmount,
+		PenaltyNote:   req.PenaltyNote,
+	}
 	if req.Status != nil {
 		st := appointment.AppointmentStatus(*req.Status)
 		input.Status = &st

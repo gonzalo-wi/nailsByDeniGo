@@ -19,8 +19,10 @@ type UpdateDepositRequest struct {
 }
 
 type AdminUpdateAppointmentRequest struct {
-	Status    *string `json:"status"`
-	ServiceID *uint   `json:"service_id"`
+	Status        *string  `json:"status"`
+	ServiceID     *uint    `json:"service_id"`
+	PenaltyAmount *float64 `json:"penalty_amount"`
+	PenaltyNote   string   `json:"penalty_note"`
 }
 
 type CancelAppointmentRequest struct {
