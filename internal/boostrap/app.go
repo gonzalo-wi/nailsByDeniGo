@@ -61,6 +61,7 @@ func BuildApp() (*gin.Engine, string) {
 	finalPriceUC := appointmentapp.NewUpdateFinalPriceUseCase(appointmentRepo)
 	updateDepositUC := appointmentapp.NewUpdateDepositUseCase(appointmentRepo)
 	nextApptUC := appointmentapp.NewNextAppointmentUseCase(appointmentRepo)
+	adminUpdateApptUC := appointmentapp.NewAdminUpdateAppointmentUseCase(appointmentRepo, serviceRepo)
 
 	getWeeklyUC := scheduleapp.NewGetWeeklyScheduleUseCase(scheduleRepo)
 	updateWeeklyUC := scheduleapp.NewUpdateWeeklyScheduleUseCase(scheduleRepo)
@@ -73,7 +74,7 @@ func BuildApp() (*gin.Engine, string) {
 	authHandler := handlers.NewAuthHandler(registerUC, loginUC, adminLoginUC)
 	appointmentHandler := handlers.NewAppointmentHandler(
 		createApptUC, cancelApptUC, confirmApptUC, completeApptUC,
-		listApptUC, getApptUC, calendarApptUC, finalPriceUC, updateDepositUC, nextApptUC,
+		listApptUC, getApptUC, calendarApptUC, finalPriceUC, updateDepositUC, nextApptUC, adminUpdateApptUC,
 	)
 	serviceHandler := handlers.NewServiceHandler(createServiceUC, listServiceUC, getServiceUC, updateServiceUC, toggleServiceUC)
 	scheduleHandler := handlers.NewScheduleHandler(getWeeklyUC, updateWeeklyUC, blockSlotUC, availabilityUC)

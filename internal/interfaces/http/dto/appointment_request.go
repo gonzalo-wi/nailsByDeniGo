@@ -17,3 +17,8 @@ type UpdateFinalPriceRequest struct {
 type UpdateDepositRequest struct {
 	DepositAmount float64 `json:"deposit_amount" binding:"required,min=0"`
 }
+
+type AdminUpdateAppointmentRequest struct {
+	Status    *string `json:"status"`
+	ServiceID *uint   `json:"service_id"`
+}

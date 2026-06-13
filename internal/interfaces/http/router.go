@@ -100,6 +100,7 @@ func SetupRouter(
 			appt.PATCH("/:id/complete", appointmentHandler.Complete)
 			appt.PATCH("/:id/final-price", appointmentHandler.UpdateFinalPrice)
 			appt.PATCH("/:id/deposit", appointmentHandler.UpdateDeposit)
+			appt.PATCH("/:id/admin", appointmentHandler.AdminUpdate)
 		}
 
 		// Schedule (solo escritura/admin)

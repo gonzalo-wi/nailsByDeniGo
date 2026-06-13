@@ -25,6 +25,7 @@ type AppointmentHandler struct {
 	finalPriceUC    *appointmentapp.UpdateFinalPriceUseCase
 	updateDepositUC *appointmentapp.UpdateDepositUseCase
 	nextUC          *appointmentapp.NextAppointmentUseCase
+	adminUpdateUC   *appointmentapp.AdminUpdateAppointmentUseCase
 }
 
 func NewAppointmentHandler(
@@ -38,6 +39,7 @@ func NewAppointmentHandler(
 	finalPriceUC *appointmentapp.UpdateFinalPriceUseCase,
 	updateDepositUC *appointmentapp.UpdateDepositUseCase,
 	nextUC *appointmentapp.NextAppointmentUseCase,
+	adminUpdateUC *appointmentapp.AdminUpdateAppointmentUseCase,
 ) *AppointmentHandler {
 	return &AppointmentHandler{
 		createUC:        createUC,
@@ -50,6 +52,7 @@ func NewAppointmentHandler(
 		finalPriceUC:    finalPriceUC,
 		updateDepositUC: updateDepositUC,
 		nextUC:          nextUC,
+		adminUpdateUC:   adminUpdateUC,
 	}
 }
 
@@ -300,6 +303,40 @@ func (h *AppointmentHandler) UpdateDeposit(c *gin.Context) {
 		ID:            id,
 		DepositAmount: req.DepositAmount,
 	})
+	if err != nil {
+		code := http.StatusBadRequest
+		if err == appointment.ErrNotFound {
+			code = http.StatusNotFound
+		}
+		c.JSON(code, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, dto.AppointmentToResponse(appt))
+}
+
+func (h *AppointmentHandler) AdminUpdate(c *gin.Context) {
+	id, err := parseID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id invalido"})
+		return
+	}
+	var req dto.AdminUpdateAppointmentRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if req.Status == nil && req.ServiceID == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "debe indicar status o service_id a modificar"})
+		return
+	}
+
+	input := appointmentapp.AdminUpdateAppointmentInput{ID: id, ServiceID: req.ServiceID}
+	if req.Status != nil {
+		st := appointment.AppointmentStatus(*req.Status)
+		input.Status = &st
+	}
+
+	appt, err := h.adminUpdateUC.Execute(input)
 	if err != nil {
 		code := http.StatusBadRequest
 		if err == appointment.ErrNotFound {

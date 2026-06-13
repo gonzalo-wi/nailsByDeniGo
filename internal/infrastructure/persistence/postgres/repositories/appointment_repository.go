@@ -44,6 +44,8 @@ func (r *AppointmentRepository) Create(entity *appointment.Appointment) error {
 func (r *AppointmentRepository) Update(entity *appointment.Appointment) error {
 	return r.db.Model(&models.AppointmentModel{}).Where("id = ?", entity.ID).Updates(map[string]interface{}{
 		"status":         string(entity.Status),
+		"service_id":     entity.ServiceID,
+		"base_price":     entity.BasePrice,
 		"extras_amount":  entity.ExtrasAmount,
 		"extras_note":    entity.ExtrasNote,
 		"deposit_amount": entity.DepositAmount,
