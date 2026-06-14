@@ -118,8 +118,8 @@ func (h *AppointmentHandler) List(c *gin.Context) {
 	if df := c.Query("date_from"); df != "" {
 		filters.DateFrom = &df
 	} else {
-
-		defaultFrom := time.Now().AddDate(0, 0, -30).Format("2006-01-02")
+		loc, _ := time.LoadLocation("America/Argentina/Buenos_Aires")
+		defaultFrom := time.Now().In(loc).AddDate(0, 0, -30).Format("2006-01-02")
 		filters.DateFrom = &defaultFrom
 	}
 	if dt := c.Query("date_to"); dt != "" {

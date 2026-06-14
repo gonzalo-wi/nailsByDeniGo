@@ -48,7 +48,8 @@ func NewCreateAppointmentUseCase(
 
 func (uc *CreateAppointmentUseCase) Execute(input CreateAppointmentInput) (*appointment.Appointment, error) {
 	if !input.IsAdmin {
-		today := time.Now().Format("2006-01-02")
+		loc, _ := time.LoadLocation("America/Argentina/Buenos_Aires")
+		today := time.Now().In(loc).Format("2006-01-02")
 		if input.Date < today {
 			return nil, appointment.ErrPastDate
 		}

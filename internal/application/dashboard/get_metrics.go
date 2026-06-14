@@ -15,7 +15,8 @@ func NewGetMetricsUseCase(repo appointment.Repository) *GetMetricsUseCase {
 }
 
 func (uc *GetMetricsUseCase) Execute() (*appointment.DashboardMetrics, error) {
-	now := time.Now()
+	loc, _ := time.LoadLocation("America/Argentina/Buenos_Aires")
+	now := time.Now().In(loc)
 	today := now.Format("2006-01-02")
 	weekday := int(now.Weekday())
 	if weekday == 0 {
